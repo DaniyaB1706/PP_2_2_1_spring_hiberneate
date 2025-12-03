@@ -4,28 +4,34 @@ import hiber.dao.UserDao;
 import hiber.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class UserServiceImp implements UserService {
 
+    private final UserDao userDao;
+
     @Autowired
-    private UserDao userDao;
+    public UserServiceImp(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
+    @Transactional
     public void add(User user) {
         userDao.add(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> listUsers() {
         return userDao.listUsers();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findUserByCar(String model, int series) {
         return userDao.findUserByCar(model, series);
     }
